@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+  echo Too few parameters. Provide version name.
+  echo Usage: $0 "<version_name>"
+  echo "         <version_name>" : For example v1.23 or v1.24
+  exit -1
+fi
+
+version=$1
+
+cd ..
+
+if [ -e bin ] || [ -L bin ]; then
+	rm bin
+fi
+
+if [ -e lib ] || [ -L lib ]; then
+	rm lib
+fi
+
+if [ -e doc ] || [ -L doc ]; then
+	rm doc
+fi
+
+mkdir -p lib_${version}/lib
+mkdir -p lib_${version}/bin
+mkdir -p lib_${version}/doc
+
+ln -s lib_${version}/lib lib
+ln -s lib_${version}/bin bin
+ln -s lib_${version}/doc doc
+

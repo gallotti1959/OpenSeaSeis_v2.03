@@ -1,0 +1,136 @@
+
+   *** SEASEIS V2.03 ***
+
+ADDITIONAL NOTES REGARDING SEISMIC UNIX (version 4.3R3)
+
+A previous attempt to support SU modules from within Seaseis is the existing module $SUMODULE. This module can pipe seismic traces to/from SU executables installed externally. $SUMODULE only allows running a single SU module in each Seaseis flow and probably has other limitations (it hasn't been tested properly yet).
+In a new attempt to support SU modules from Seaseis, SU modules can now be directly compiled into Seaseis and accessed via the Seaseis module $SU. To avoid build problems for people who do not use SU, the default in the Seaseis make scripts is to NOT compile the new module $SU.
+
+
+********************************************************************************
+********************************************************************************
+
+ HOW TO BUILD NEW SEASEIS MODULE '$SU'
+
+How to build the new Seaseis module $SU and all currently available SU modules.
+
+
+0) Environment
+Make sure $CWPROOT is set and points to the root directory of SU where the following sub-directories are present:
+$CWPROOT/src
+$CWPROOT/include
+$CWPROOT/lib
+
+
+1) Re-build Seismic Unix from scratch, using -fPIC
+One update to the Seismic Unix make files is required for Seaseis to be able to access its libraries.
+Add the compiler option -fPIC to the file Makefile.config:
+
+OPTC = -fPIC -O -std=c99 -Wall -pedantic -Wno-long-long 
+
+..then re-build Seismic Unix on your system
+
+
+2) Enable SU build in Seaseis make script
+In make script make_seaseis.sh, set BUILD_SU=1:
+export BUILD_SU=1  # Set to 1 if SU module shall be compiled. Requires special SU installation, see file README_SU
+
+
+3) Build Seaseis
+Run make_seaseis.sh
+ ./make_seaseis.sh
+
+You will get quite a few warnings from the SU source code, but it should all compile successfully.
+
+
+4) Check SU module dependencies
+To check whether all dependencies are met, type
+ seaseis -m su 1.0
+This will print out an error message if there are missing dependencies.
+
+
+5) Run Seaseis flow
+# Example setup
+$SU
+ name sugain
+ param tpow=2 scale=10
+
+
+
+********************************************************************************
+********************************************************************************
+
+ HOW TO ADD MORE SU MODULES TO SEASEIS
+
+Only some SU modules have been converted to Seaseis so far, see seaseis_v2.03/src/cs/su/su_modules.txt
+To convert more modules, follow these instructions:
+
+1) Build helper programs
+Build the two helper programs
+  helper_convert_su_c2cpp.cc, and 
+  helper_create_su_make_include.cc
+These are located in directory seaseis_v2.03/src/cs/su/
+To build, use the following commands:
+
+export SRCDIR=<your_seaseis_src_path>/seaseis_v2.03
+export LIBDIR=<your_seaseis_lib_path>/lib
+cd $SRCDIR/src/cs/su
+g++ helper_convert_su_c2cpp.cc -o helper_convert_su_c2cpp -I../geolib -Wl,-rpath,${LIBDIR} -L${LIBDIR} -lgeolib
+g++ helper_create_su_make_include.cc -o helper_create_su_make_include -I../geolib -Wl,-rpath,${LIBDIR} -L${LIBDIR} -lgeolib
+
+
+2) Convert SU C code to Seaseis-compatible C++ code
+The first helper program (helper_convert_su_c2cpp.cc) converts the C source code for all SU modules from one directory.
+For example, you could convert all SU 'filters' modules as such:
+./helper_convert_su_c2cpp  $CWPROOT/src/su/main/filters  $SRCDIR/src/cs/su/main
+
+
+3) Add new SU modules to list of SU modules
+Add all new SU modules to the list in the ASCII file
+$SRCDIR/src/cs/su/su_modules.txt
+You can copy-paste the list which is printed out on the screen in the previous step
+
+
+4) Create make files for SU modules
+The second helper program (helper_create_su_make_include.cc) automatically creates a header file and make file required to build the Sweaseis modules $SU.
+Run the following command:
+./helper_create_su_make_include < su_modules.txt
+
+
+5) Build Seaseis
+Go to the Seaseis source directory and re-make Seaseis
+cd $SRCDIR
+./make_seaseis.sh
+
+You will probably see warning messages for many SU modules.
+Occasionally, there may be an error which will need to be fixed in the corresponding SU module under $SRCDIR/src/cs/su/main.
+For all SU modules which I have converted so far, only one created an error, relating to how the function 'pow(x,y)' was used.
+To fix any problems with 'pow(x,y)', make sure both arguments are floating point numbers. For example,
+  float x = 3.0;
+  pow(x,2);   // Error
+  pow(x,2.0); // Correct
+The former will generate a compiler error due to ambiguities in the function's argument types.
+
+
+
+********************************************************************************
+********************************************************************************
+
+ CURRENT LIMITATIONS (February 2013) 
+
+1) Methods get_gather() and put_gather()
+These are global methods akin to gettr() and puttr(), and are used by some SU modules. These SU modules will not work in Seaseis. They may hang or crash, or generate wrong answer (not clear which one..).
+It should be straight forward to replace these two methods with equivalent C++ methods which are compatible with Seaseis.
+
+2) Methods fgettr() and fputtr()
+Same as for the previous point, these could probably be translated into equivalent C+ methods that can be used in Seaseis but this hasn';t been done yet. Therefore, SU modules using fgettr() and/or fputtr() may or may not work in Seaseis yet.
+
+3) 'static' variables and methods
+Any static variable in the SU code creates problems since the same variable will be used by potentially several instances of the same SU module in Seaseis. Hence, each SU module is currently restricted to be used only once in each Seaseis flow.
+Seaseis works fine with this limitation in place.
+'static' variables which are local to one SU module code should be straight-forward to convert into non-static ones. However, this would require a manual effort for each affected SU module, which means no automatic conversion is possible using a helper program like the ones mentioned above.
+
+4) Other unknown (global) methods and variables
+Apart from the above, there may be other global/static methods and variables used in some SU modules which cause problems when run within Seaseis.
+
+

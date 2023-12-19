@@ -1,0 +1,128 @@
+================================================================================
+
+ SeaSeis Version 2.03   (built  May 30 2015 13:55:17)
+ Date: Tue Jun 16 17:45:39 2015
+
+
+================================================================================
+
+
+Pre-parse input file 't03_create_image_spec.flow'...
+
+Pre-parser summary:
+
+  Parsed  35 lines,
+   found   0 'define' statement(s),
+           0 table(s), and
+           2 module(s).
+
+Input flow 't03_create_image_spec.flow':
+
+#--------------------------------------------------------------
+# Example SeaSeis flow
+# Date: 7 Nov 2011
+# SeaSeis version v1.12
+#
+
+$INPUT
+ filename data/t01_pseudo_data_spectrum.cseis
+
+$IMAGE
+ filename             images/t03_image_spectrum.png
+ temp_dir             data
+ width                400  
+ height               800  
+ trace_spacing        even  
+ header               rcv
+ title                "Example data image - FX spectrum"
+ fontsize             12
+ window               0 200
+# db                   yes
+ color_bar            right  60 
+ color_bar_ann        fancy  20 
+ scale_type           range
+ min_value            0
+ max_value            10
+ wiggle               none
+ vi_type              spline
+ pos_fill             no
+ neg_fill             no
+ show_zero_lines      no
+ show_time_lines      yes  
+ time_major_inc       100
+ time_minor_inc       20
+ time_max_decimals    0
+ vi_color_map         cold_warm
+
+End of flow.
+================================================================================
+
+Run init phase...
+
+
+Run INIT phase for module  #1     INPUT...
+
+  File name #1 :      data/t01_pseudo_data_spectrum.cseis
+  Header block size:             36
+  Max number of buffered traces: 20
+*** START Super header ***
+Sample interval:        0.122070 Hz
+Number of samples:      2049
+Domain code:            111 (= x-frequency domain)
+FFT data type:           500 (= Unknown)
+# ensemble keys:        0
+Grid origin row/col:                   1                    1
+Grid origin XY coord.:           0.00000 m            0.00000 m
+Grid bin size (il/xl):           0.00000 m            0.00000 m  (corresponding to row/col interval = 1)
+Inline/xl direction:             0.00000 deg         90.00000 deg  (clock-wise from North)
+*** END Super header ***
+
+
+Run INIT phase for module  #2     IMAGE...
+
+Command to execute:
+    plotimage.sh -o images/t03_image_spectrum.png -f data/tmp11721images_t03_image_spectrum_pngscaxefhlkl.cseis -height 800 -width 400 -fontsize 12 -min_time 0.000 -max_time 200.000 -trace_spacing even  -color_bar right60 -color_bar_ann fancy20 -header rcv -p data/tmp11721images_t03_image_spectrum_pngscaxefhlkl.prop -max_decimals 0
+
+
+------------------------------------------------------------
+Init phase summary
+
+  #  Module                sampleInt  numSamples  #headers
+  1  INPUT                   0.12207        2049         8
+  2  IMAGE                   0.12207        2049         8
+
+Init phase processing time:      0.003000 seconds
+
+
+
+================================================================================
+
+Run exec phase...
+
+
+...executing command:
+    plotimage.sh -o images/t03_image_spectrum.png -f data/tmp11721images_t03_image_spectrum_pngscaxefhlkl.cseis -height 800 -width 400 -fontsize 12 -min_time 0.000 -max_time 200.000 -trace_spacing even  -color_bar right60 -color_bar_ann fancy20 -header rcv -p data/tmp11721images_t03_image_spectrum_pngscaxefhlkl.prop -max_decimals 0
+
+
+------------------------------------------------------------
+Exec phase summary
+
+  #  Module                Traces in  Traces out     CPU time   CPU time all
+  1  INPUT                         0          30        0.000          0.000
+  2  IMAGE                        30          30        0.001          0.001
+
+------------------------------------------------------------
+
+ Total processing time:      1.169000 seconds
+
+ Date: Tue Jun 16 17:45:40 2015
+
+
+ Trace allocation summary:
+ Total number of used/allocated traces:  1/4
+ Total number of allocated (trace) memory:  0.00kb  (= 0.00Mb)
+
+
+
+ End of log.
+================================================================================

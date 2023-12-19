@@ -1,0 +1,507 @@
+
+
+<HTML>
+<HEAD>
+
+<TITLE>SeaSeis - A simple seismic processing system</TITLE></head>
+<BODY  BGCOLOR="#ffffff"
+ TEXT="#000000"
+
+LEFTMARGIN="0" TOPMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0"
+
+ onLoad=""
+ 
+ LINK="#0000ee"
+ VLINK="#551a8b"
+ ALINK="#ee0000"
+>
+
+<table border="0" CELLSPACING="10">
+<tr><td colspan="2" align="center">
+
+<font face='Arial' size='+1' color='#5D9DCE'>
+SeaSeis Documentation
+</font>
+
+
+</td></tr>
+<tr><td colspan="3"></td></tr>
+<tr><td colspan="10" align="left">
+
+<font face='Arial' size='2' color='#000000'>
+
+<p>
+<a href="#VersionHelp">Release notes</a><br><br>
+<a href="#InstallHelp">How to install</a><br><br>
+<a href="#Introduction">Introduction and background</a><br><br>
+<a href="#TechnicalHelp">Technical reference</a><br><br>
+<a href="#ModuleHelp">How to add a new module</a><br><br>
+<a href="seaseis_module_help.html" name="Modules and Standard Headers">Help - Modules and standard headers</a><br><br>
+<a href="seaview_help.html" name="SeaView Tutorial">SeaView Tutorial</a><br><br>
+</p>
+<br>
+
+<hr>
+<br>
+
+
+<h2><a name="VersionHelp">Release notes</a></h2>
+
+<h3>Updates in v2.00 compared to v1.92</h3>
+
+New ownership:
+<ul>
+<li> Seaseis is now owned by Colorado School of Mines, USA
+</ul>
+
+New distribution license:
+<ul>
+<li> Seaseis is now distributed using the Free BSD license (previously GPL 3)
+</ul>
+
+FFTW:
+<ul>
+<li> Due to incompatibilities with the new license, the fftw library source code has been removed from Seaseis. This means, fftw is now an external dependency </li>
+<li> Install fftw separately from www.fftw.org (or for example using your Linux package manager) </li>
+<li> If the fftw library is not installed on your system, the FFT module will be built with an alternative fft library, and FFT_2D will be an empty shell </li>
+</ul>
+
+Mini SEED reader:
+<ul>
+<li> Due to incompatibilities with the new license, the Mini SEED library source code from IRIS has been removed from Seaseis </li>
+<li> The source code for module INPUT_MSEED is still there (under src/cs/unused), but is not compiled. If you need this module, you will need to install the Mini SEED library yourself. </li>
+</ul>
+
+Build scripts:
+<ul>
+<li> Removed fftw library source code from Seaseis due to license update </li>
+<li> Major updates to build scripts make_seaseis.sh and src/make/linux/cmake.sh </li>
+<li> Simplify user setup of installed compiler versions for C, C++ and Fortran </li>
+<li> Makefile_libs: Added -ldl directive to make Seaseis system library in order to fix link errors for dlopen etc. </li>
+</ul>
+
+SeaSeis general:
+<ul>
+<li> Support for RSF (seplib/Madagascar) format  (3D cubes only) </li>
+</ul>
+
+Modules:
+<ul>
+<li> New modules: INPUT_RSF, OUTPUT_RSF  (3D cubes only) </li>
+<li> INPUT: Enable trace selection and sorting based on one user defined trace header </li>
+<li> INPUT_SEGY: Enable trace selection and sorting based on one user defined trace header </li>
+<li> INPUT_ASCII: Bug fixed when reading in ASCII files (could cause crashes, or incorrect sample values being assigned to trace). Skip potentially empty lines in ASCII input file. Skip leading spaces. Assign zero or linear phase to input amplitude spectrum. </li>
+<li> SORT: Fixed minor bug related to input option 'tree'. </li>
+<li> TRC_MATH: Add option to compute dB for amplitude and power. New option to 'flip' trace, so that last sample becomes first sample. </li>
+<li> TRC_MATH_ENS: New option: Apply sliding 3D mean filter </li>
+<li> ATTRIBUTE: Enable attribute selection based on seimsic input horizon </li>
+<li> PICKING: Pick specific value in input trace </li>
+<li> INPUT_SINEWAVE: Fixed bug in case phase is not specified </li>
+</ul>
+
+Seaview:
+<ul>
+<li> Support for RSF (seplib/Madagascar) format (3D cubes only) </li>
+<li> Better support for SU/SEGY files stored in any endian byte format: </li>
+<li>  New user options allow user to specify input file endian byte order. The selections are saved until next session. </li>
+<li> Save user specified color bit type until next session. </li>
+</ul>
+
+Mac OS:
+<ul>
+<li> Various updates to build scripts and platform dependent pieces of code to enable build on Mac OS </li>
+<li> The build has been tested on Snow Leopard 32bit </li>
+</ul>
+
+Seismic Unix:
+<ul>
+<li> Seaseis now compiles a number of SU modules directly into Seaseis, and tentatively supports running Seismic Unix modules via a new Seaseis module called $SU </li>
+<li> Several functions used in some SU modules have not been ported yet; these modules may not run properly </li>
+<li> Otherwise, the biggest limitation is that each SU module can only be specified once per Seaseis flow, due to global and/or static variables being used in the SU code </li>
+<li> See README_SEISMIC_UNIX for more details </li>
+</ul>
+
+<br>
+<hr>
+<br>
+
+<h2><a name="InstallHelp">How to install</a></h2>
+
+<h2>Installation</h2>
+Please follow the instructions below.<br>
+<b>Summary:</b> Run the make scripts and include the SeaSeis binary directory into your PATH. All make scripts are hard-wired to the GNU C/C++ compilers and make utility. For the seismic viewer, SUN/Oracle Java 6 needs to be installed. The source tar ball includes a make utility for the Java source code, but I recommend using the provided jar files (unless you run into problems with these since you are using an older version of the Java run-time environment/JRE).
+<br>
+
+
+<h3>Linux/UNIX Installation</h3>
+
+<ol>
+	<li>Extract the tar ball anywhere on your system (for example into /opt/seaseis, and it will end up in /opt/seaseis/seaseis_v2.00), go into the subdirectory seaseis_v2.00 and run the script make_seaseis.sh:<br>
+<kbd><b>./make_seaseis.sh</b></kbd>
+	</li>
+	<li>Add the 'bin' directory to your path (environment variable <b>$path</b>).<br>
+	Example for tcsh shell: <kbd><b>set path = ($path /opt/seaseis/bin)</b></kbd></li>
+	Example for bash shell: <kbd><b>export PATH=${PATH}:/opt/seaseis/bin</b></kbd></li>
+	<li>It seems that with certain system setups, you may also need to set the library path environment variable <b>$LD_LIBRARY_PATH</b> to include the 'lib' directory (I don't know exactly when this is necessary, maybe with mounted disk drives..?)</li>
+	<li>Test SeaSeis on the command line<br>
+      <kbd><b>seaseis -h</b></kbd> should give a listing of command line options<br>
+      <kbd><b>seaseis -m input</b></kbd> should give a short online help for the SeaSeis input module<br>
+      <kbd><b>seaview.sh</b></kbd> should open SeaView, the interactive 2D viewer (Java application)<br>
+	</li>
+	<li>Run example SeaSeis flows<br>
+      <kbd><b>cd example_flows</b></kbd> to go into the example flow directory<br>
+      <kbd><b>./run_flows.sh</b></kbd> to run all example flows. This should pop up several SeaView windows when finished.<br>
+	</li>
+</ol>
+
+<h4>Dependencies</h4>
+<ul>
+<li>GNU make utility</li>
+<li>GNU C (gcc) and C++ (g++) compilers. Any version should do, my current version is 4.4.3.</li>
+<li>GNU C (gfortran) compiler. This is only required for one module (RAY2D). If you are having problem to build this module, you can remove it by removing the directory src/cs/modules/ray2d, and remove the corresponding line in the file src/include/cseis_modules.txt</li>
+<li>Java 6 run time environment (JRE SE 6).
+<ul>
+<li>The version I am currently using is 1.6.0_20. SUN/Oracle Java is sometimes included in standard Linux distributions, but may also need to be downloaded and installed manually from the <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java home page</a>.
+Unfortunately, installing Java has become more complicated recently both for developers and users since there are now two competing versions:
+An <i>open-source</i> version "OpenJava", and the Oracle version. I don't really know which one is better, but for Java 6.0 I recommend the Oracle version.</li>
+</li></ul>
+</li>
+</ul>
+
+<h4>External library fftw</h4>
+<ul>
+<li>In order to make use of the high-performance library fftw for modules $FFT and $FFT_2D, fftw needs to be installed separately avoid external dependencies it has been included in the source distribution of SeaSeis.</li>
+<li>All make and build scripts are the original files downloaded from the <a href="http://www.fftw.org/">fftw web site</a>, extended by some additional wrapper scripts</li>
+<li>I am not sure what type of problems may occur with the build of this library. Send me an email if you are having problems</li>
+</ul>
+
+
+
+<br>
+
+<h3>Windows Installation</h3>
+
+The distribution contains pre-compiled binaries for Windows operating system (32bit and 64bit). Previous versions have reportedly had unresolved dependencies; this has hopefully been resolved by linking all gcc and gfortran libraries statically. The source code can also be compiled using the make utility make_seaseis_win32/64.bat, or the equivalent shell script for Linux (ending in .sh).<br>
+<h4>Installation from binaries</h4>
+<ol>
+   <li>Installation...<br>
+       ...from binaries:
+   <ul>
+   	<li>Extract the zip file anywhere on your system (for example to C:\Seaseis).</li>
+   </ul>
+   ...from source:
+   <ul>
+   	<li>Install the <a href="http://mingw-w64.sourceforge.net/">MinGW</a> compiler suite. This is straightforward on a Win32 system since there is an install wizard, but in my experience on a Win64 system it is not. This is why I compiled the Win binaries with the MinGW cross-compiler from Linux</li>
+   	<li>Extract the tar ball anywhere on your system (for example to C:\Seaseis), and run the script make_seaseis_win32.bat in a DOS window.<br>
+<kbd><b>make_seaseis_win32.bat</b></kbd>
+   	</li>
+   </ul>
+   </li>
+
+
+   <li>Add the 'bin' directory (for example C:\Seaseis\win32\bin) to your path. This is done under Control Panel -> System -> Advanced Settings -> Environment Variables -> Path</li>
+	<li>Test SeaSeis<br>
+      In a DOS window: <kbd><b>seaseis -h</b></kbd> should give a listing of command line options<br>
+      In Windows Explorer, double-click on <kbd><b>C:\Seaseis\win32\bin\seaview.bat</b></kbd>. This should open SeaView, the interactive 2D viewer (Java app). To fault-find in case of problems, navigate to the folder <kbd><b>C:\Seaseis\win32\bin</b></kbd> in a DOS window and run the command <kbd><b>seaview.bat</b></kbd> manually. This will print potential error messages to the screen.<br>
+	</li>
+	<li>Run example SeaSeis flows<br>
+      <kbd><b>cd example_flows</b></kbd> to go into the example flow directory<br>
+      <kbd><b>run_flows.bat</b></kbd> to run all example flows. This should pop up several SeaView windows when finished.<br>
+	</li>
+</ol>
+
+<h4>Dependencies</h4>
+<ul>
+<li><a href="http://mingw-w64.sourceforge.net/">MinGW</a> compiler suite, including the GNU C/C++/gfortran compilers and make utility. This can be used as a cross-compiler on Linux, or directly in Windows. Any C++ compiler should work but the make scripts are currently hardwired to MinGW.</li>
+<li>Java 6 run time environment (JRE SE 6) as discussed above under the Linux installation help</li>
+</ul>
+
+
+<br>
+
+
+<br>
+<hr>
+<br>
+
+<h2><a name="Introduction">Introduction</a></h2>
+<br>
+
+SeaSeis is a sequential trace flow system, following the same basic concept of most other existing seismic processing systems.
+
+By one measure, processing systems can be categorised into 2 camps:
+<ol>
+	<li>Processing systems that are using standard I/O for passing traces from module to module, and</li>
+	<li>Processing systems that have a <i>base</i> system for managing the trace flow.<br><em>(see sketches below)</em></li>
+</ol>
+
+
+<h4>Open-source systems</h4>
+
+Seaseis is an open-source program, following the above design (2).<br>
+Other open-source systems I am aware of follow design (1), i.e. using UNIX standard I/O for their trace flow. These are Seplib, SU, FreeUSP and RSF/Madagascar, which are all derived from the same code base and conceptual idea, and are historically linked. An exception is SIA/IGeoS, which is an open-source (or semi-commercial?) system that follows the design (2).
+
+<br>
+
+<h4>Commercial/proprietary systems</h4>
+All commercial systems I am aware of have a base system which manages the trace flow, i.e. following design (2). SeaSeis resembles more the design of a commercial systems, providing a base system which manages the trace flow.
+
+<br>
+<br>
+
+<h4>Processing systems using standard I/O</h4>
+<img src="images/processing_systems_stdin_stdout.jpg" width="60%"  border="2" name="system_stdin" alt="Processing systems using standard I/O" align="centre">
+
+<h4>Processing systems with <i>base</i> system</h4>
+<img src="images/processing_systems_withBaseSystem.jpg" width="60%" hspace="2" vspace="2" border="2" name="system_base" alt="Processing systems with base system" align="centre">
+<br>
+<br>
+<br>
+
+
+
+<br>
+<hr>
+<br>
+
+<h2><a name="TechnicalHelp">Technical reference</a></h2>
+<br>
+
+<h3><a name="Terminology">Terminology</a></h3>
+<dl>
+	<dt>Flow</dt>
+	<dd>A processing <em>flow</em> is an ASCII text file where the user defines the modules and parameters to perform a certain processing task. The processing flow is translated by the processing system into an executable process.</dd>
+   <dt>Job</dt>
+   <dd>A processing <em>job</em> is the process of running a processing task. The same processing flow may be submitted more than once. Each submission is running a new processing job.</dd>
+   <dt>Log</dt>
+   <dd>A <em>log</em> file documents what happened in each processing job. The log contains all information related to the processing flow that was submitted, and to the actual job that was run. The log file is the means by which the processing system communicates with the user, for example by giving error messages and other job related information.</dd>
+   <dt>Trace</dt>
+   <dd>SeaSeis is a sequential trace flow system. All data is passed through the processing flow as single <em>traces</em>. A trace consists of a <em>trace header</em>, and <em>trace data</em>.</dd>
+   <dt>Trace header</dt>
+   <dd>The <em>trace header</em> is dynamic and can hold an arbitrary number of trace header <em>fields</em>. The term <em>trace header</em> is often used in SeaSeis as a synonym for <em>trace header field</em>.</dd>
+   <dt>Trace data</dt>
+    <dd>The <em>trace data</em> is the seismic data itself. SeaSeis only has one data type option, i.e. 32bit floating point.</dd>
+   <dt>Super header</dt>
+   <dd>The <em>super header</em> is a mostly pre-defined block of header fields that contains information about all traces passing through one processing module. The super header contains:
+<ul>
+ <li>Number of trace data samples</li>
+ <li>Sample interval</li>
+ <li>Ensemble header names(s)</li>
+ <li>Survey information</li>
+ <li>Number of trace header fields in each trace header</li>
+ <li>Type, name and description of each trace header field</li>
+</ul>
+  Super header fields cannot be directly modified by the user, so the super header concept is in most cases not relevant to know for the user. The trace header and super header concept is very common in seismic processing systems, as can be seen for example in the SEG-Y standard data format.
+   </dd>
+</dl>
+<br>
+
+<h3>Command line submission</h3>
+
+Typing 'seaseis -h' on the command line produces the following help listing
+
+<pre>
+SeaSeis job flow submission tool.
+ Usage:  seaseis -f &lt;jobflow&gt; [-o &lt;joblog&gt; | -d &lt;joblog_dir&gt;] [-h] [-m &lt;name&gt;] [-v] [-c] [-std] [-p {speed|memory} ] [-g &lt;const_file&gt;] [-s &lt;spreadsheet&gt;]
+ -f &lt;flow1&gt; &lt;flow2&gt; ... : File name(s) of job flow(s) to run
+ -o [&lt;log&gt;|stdout]      : File name of job log (defaulted to flowname.log if not specified)
+                        : Use 'stdout' to redirect all log file output to standard output
+ -d &lt;log_dir&gt;           : Name of directory where job log shall be saved
+ -s &lt;spreadsheet file&gt;  : Name of file containing spread sheet for building of master flow
+ -g &lt;global const. file&gt;: Name of file containing global constants (&define statements)
+ -D &lt;name1&gt;[=,:]&lt;val1&gt; &lt;name2&gt;[=,:]&lt;val2&gt; ... : Define user constant &lt;name&gt;, value &lt;val&gt;. No spaces allowed around equal sign.
+                                        NOTE: The first user constant will be used to create the log file name.
+ -ff &lt;flow_out&gt;         : Name of file where job flow shall be saved (only works when -D option is specified).
+ -m &lt;name&gt;              : Print help for module &lt;name&gt;.<br>
+                        : If no module is found, print help of all modules starting with &lt;name&gt;.
+                        : If &lt;name&gt; = empty: Print full help for all available modules.
+                        : If &lt;name&gt; = .: Print short help for all available modules.
+ -run_master            : Immediately run all flows created from master flow(s)
+                        : If not specified, the program will exit after the master flows have been created.
+ -h                     : Print this page
+ -html                  : Print full help for all modules & standard trace headers in HTML.
+ -v                     : Print out version info
+ -std                   : Dump all standard trace headers
+ -c                     : Check for link problems and consistency of all modules' params(=help) methods.
+ -p [speed | memory]    : Set memory policy: Optimised for speed or memory.
+ -no_run                : Do not run flow. This option is useful if an individual flow file is generated using option -ff
+ -init_only             : Run init phase only.
+ -no_verbose            : Do not output information messages.
+ -debug                 : Output extensive DEBUG information for trace flow preparation and execution.
+</pre>
+<br>
+<br>
+
+<!-- ************************************************************************************* -->
+
+<h3>Flow syntax</h3>
+
+<p>SeaSeis processing flows are written in a simple ASCII format that follows a handful of syntactic rules.
+</p>
+<br>
+<h3>Special characters</h3>
+<dl>
+	<dt><b>$</b><i>MODULE_NAME</i></dt>
+	<dd>...followed by capital letter word: Name of module</dd>
+	<dt><b>#</b><i> User comment</i></dt>
+	<dd>All text to the right of a hash sign are user comments</dd>
+</dl>
+<br>
+
+<h4>Parameter and values</h4>
+
+The first word in each line is a pre-defined parameter name, while the remaining part consists of free-form text or numbers, depending on what type of input parameter is required. All words in the flow file can be space- or tab-separated. Single parameter values that contain spaces must be enclosed by double quotation marks "".<br>
+<p>
+Examples:<br>
+ <i>param_name &nbsp; val<sub>1</sub>  &nbsp; val<sub>2</sub>  &nbsp; val<sub>3</sub> ...</i> <br>
+ <i>equation &nbsp; "sqrt(val<sub>1</sub>) + pow(val<sub>2</sub>,2) - val<sub>3</sub>*(val<sub>2</sub> - val<sub>1</sub>)"</i>
+</p>
+<br>
+
+
+<h4>Key words</h4>
+<dl>
+	<dt><b>&define</b> <i>constant_name constant_value</i></dt>
+	<dd>Defines user constant name and value available throughout the flow script. Each occurrence of &constant_name& anywhere in the processing flow is replaced by constant_value before running the flow</dd>
+	<dt><b>&table</b> <i>table_name filename_path</i></dt>
+	<dd>Defines ASCII table available to all modules in flow, and can be referenced by table_name</dd>
+</dl>
+<br>
+
+<h4>Flow branching</h4>
+SeaSeis provides two ways of flow branching
+
+<ol>
+	<li>IF-ELSEIF-ELSE-ENDIF block<br>
+	Each trace flows through either the IF branch, one of the ELSEIF branches or the ELSE branch. All traces merge together into the main flow at the ENDIF.</li>
+	<br>
+	<li>SPLIT-ENDSPLIT block<br>
+	Each trace selected in the SPLIT module is copied into an independent branch where the trace is processed separately from the main flow. Traces copied into the SPLIT branch are not merged back into the main flow, and are discarded at the ENDSPLIT.
+   </li>
+</ol>
+<br>
+
+<h4>Example flow</h4>
+<img src="images/seaseis_example_flow.png" width="389" height="641" border="1" hspace="1" vspace="5" name="ExampleFlow" alt="Example flow" align="middle">
+
+<br>
+<br>
+
+<!-- ************************************************************************************* -->
+
+<h3>Selection syntax</h3>
+<p>
+Many modules provide trace selection based on trace header values.
+The parameters used for trace selection are usually:
+</p>
+<table style="font-size:80%">
+<tr>
+<td width=150>header</td>
+<td>List of trace header names, separated by spaces</td>
+</tr>
+<tr>
+<td width=150>select</td>
+<td>List of selection expressions, separated by colons (:)</td>
+</tr>
+</table>
+
+<p>
+The selection syntax is the same as in Promax, plus a few additions. The examples below illustrate each syntactic item:
+</p>
+
+<table style="font-size:80%">
+<tr>
+<td width=250>select 1000</td>
+<td>Select single value</td>
+</tr>
+<tr>
+<td width=250>select 1000,2000</td>
+<td>Select several values separated by commas</td>
+</tr>
+<tr>
+<td width=250>select 1000-2000</td>
+<td>Select range of values</td>
+</tr>
+<tr>
+<td width=250>select 1000-2000(10)</td>
+<td>Select every 10'th value in range 1000 and 2000</td>
+</tr>
+<tr>
+<td width=250>select &lt;1000</td>
+<td>Select values below 1000</td>
+</tr>
+<tr>
+<td width=250>select &gt;1000</td>
+<td>Select values above 1000</td>
+</tr>
+<tr>
+<td width=250>select !1000</td>
+<td>Omit single value</td>
+</tr>
+<tr>
+<td width=250>select 10-20/100-200/&gt;500</td>
+<td>Use slashes to list several selections. In this example, all traces with values 10-20, 100-200, and above 500 will be selected. This means a forward slash (/) performs an OR operation.</td>
+</tr>
+<tr>
+<td width=250>----------------------------------------------</td>
+</tr>
+<tr>
+<td width=250>header hdr1 hdr2</td>
+</tr>
+<tr>
+<td width=250>select 10-20:1/100-200:4/&gt;500:5</td>
+<td>In this example, two trace headers were specified for selection (hdr1 and hdr2). All traces with hdr1=10-20 AND header2=1, OR hdr1=100-200 AND hdr2=4, OR hdr1>500 AND hdr2=5 will be selected.</td>
+</tr>
+<tr>
+<td width=250>select 1000:345</td>
+<td>If several trace headers were specified under parameter 'header', the selection expressions of both have to be separated by colons. This example selects all traces for which hdr1 = 1000 and hdr2 = 345</td>
+</tr>
+<tr>
+<td width=250>select  1000:345/445/545</td>
+<td>This example selects all traces which have hdr1 = 1000, and hdr2 = 345, 445 or  545</td>
+</tr>
+<tr>
+<td width=250>select  1000:*</td>
+<td>Use the star (*) to select all values for a particular trace header</td>
+</tr>
+</table>
+<br>
+<br>
+
+</font>
+
+
+</td></tr>
+</table>
+
+
+<br>
+<hr>
+<br>
+
+<h2><a name="ModuleHelp">How to add a new module</a></h2>
+
+<ol>
+	<li>Create a new sub-directory under <em><strong>src/cs/modules</strong></em> called by the module name.
+	    For example, for a new module called <em><strong>NEW_TOOL</strong></em> create a sub-directory called <em><strong>src/cs/modules/new_tool</strong></em>.</li>
+	<li>Create a make file called <em><strong>Makefile</strong></em> and a C++ file called by the module name with a prefix <em><strong>mod_</strong></em>.
+	    For example, the source file for module <em><strong>NEW_TOOL</strong></em> should be called <em><strong>mod_new_tool.cc</strong></em>. However, any file name(s) can be used if properly specified in the make file.
+	    Both the make file and the module C++ source file are best copied from an existing module, for example from module <em><strong>TEST</strong></em> under <em><strong>src/cs/modules/test</strong></em>. In the copied make file, change the module name. In the copied source file, change all occurences of <em><strong>mod_test</strong></em> to <em><strong>mod_new_tool</strong></em>.</li>
+	<li>After following the above steps, the module will automatically compile when running <em><strong>./make_seaseis.sh</strong></em> in the seaseis root directory. To access the module help, type <em><strong>seaseis -m new_tool 1.0</strong></em> from the command line.</li>
+	<li>In order to add the new module to the list of standard modules, add a line in the file <em><strong>src/include/cseis_modules.txt</strong></em>, giving the name of the module, and the module type (single/multi trace or input module). This ensures that the new module's online documentation is added to the HTML documentation, and the module help can simply be accessed by typing <em><strong>seaseis -m new_tool</strong></em> on the command line.</li>
+</ol>
+
+Again, I recommend to copy the module directory of an existing module, rename the module name in the Makefile and the C++ source file, and then update the file <em><strong>src/cs/cseis_modules.txt</strong></em>. There are examples for a single-trace module (module <em><strong>TEST</strong></em>), multi-trace module with a fixed number of input traces (module <em><strong>TEST_MULTI_FIXED</strong></em>) and multi-trace module with ensemble input (module <em><strong>TEST_MULTI_ENSEMBLE</strong></em>).
+
+<br>
+<br>
+<br>
+
+<FONT FACE="verdana, arial, helvetica" SIZE="1">
+<center>
+<nobr>|<a href="index.shtml">Home</A></nobr>
+<nobr>|<a href="download.shtml">Download</A></nobr>
+<nobr>|<a href="about.shtml">About</A></nobr>
+<nobr>|Documentation|</nobr>
+</center>
+</font>

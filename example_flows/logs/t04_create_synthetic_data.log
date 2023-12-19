@@ -1,0 +1,214 @@
+================================================================================
+
+ SeaSeis Version 2.03   (built  May 30 2015 13:55:17)
+ Date: Tue Jun 16 17:45:40 2015
+
+
+================================================================================
+
+
+Pre-parse input file 't04_create_synthetic_data.flow'...
+
+Pre-parser summary:
+
+  Parsed  79 lines,
+   found   0 'define' statement(s),
+           0 table(s), and
+           7 module(s).
+
+Input flow 't04_create_synthetic_data.flow':
+
+#--------------------------------------------------------------
+# Example SeaSeis flow
+# Date: 7 Nov 2011
+# SeaSeis version v1.14
+#
+
+$INPUT_CREATE
+ ntraces      120
+ length       8000
+ sample_int   2
+ noise        0.0001
+ value        0.0
+
+$HDR_MATH
+ new rec_x
+ new sou_x
+ equation rec_x "trcno * 50.0"
+ equation sou_x "0.0"
+
+$RAY2D
+ seismogram   20 dynamic
+ gather       source
+ model_type   1d  vs
+ max_offset   11000
+ dt_ray       40
+ spread_dist  20
+ spread_angle 2.3
+ nrays        400
+ rec_x    rec_x
+ rec_z    1620
+ rec_loc  2 2
+ sou_x    sou_x
+ sou_z    10
+ sou_loc  1
+ int1d 1 0
+ int1d 2 1620
+ int1d 3 1780
+ int1d 4 2100
+ int1d 5 3300
+ int1d 6 4000
+ int1d 7 5000
+ layer 1 1475 1
+ layer 2 1500 200
+ layer 3 1670 280
+ layer 4 2040 600
+ layer 5 3500 1400
+ layer 6 3600 1600
+ layer 7 3700 1700
+ # P-wave ray paths (P-wave: Positive layer numbers, S-wave: Negative layer numbers)
+ ray_code 1 2 2
+ ray_code 1 2 3 3 2
+ ray_code 1 2 3 4 4 3 2
+ ray_code 1 2 3 4 5 5 4 3 2
+ # P-wave source-side multiple ray paths
+ ray_code 1 1 1 2 2
+ ray_code 1 1 1 2 3 3 2
+ ray_code 1 1 1 2 3 4 4 3 2
+ ray_code 1 1 1 2 3 4 5 5 4 3 2
+ # Converted wave ray paths
+ ray_code 1 2 -2
+ ray_code 1 2 3 -3 -2
+ ray_code 1 2 3 4 -4 -3 -2
+ ray_code 1 2 3 4 5 -5 -4 -3 -2
+# dump_model model.out
+
+$OUTPUT
+ filename    data/t04_syn_data.cseis
+
+# Transform to frequency domain
+$FFT
+ output amp
+
+# Selecting frequency range, specified in [Hz]
+$SELECT_TIME
+ start 0
+ end   60
+
+$OUTPUT
+ filename    data/t04_syn_data_spectrum.cseis
+
+End of flow.
+================================================================================
+
+Run init phase...
+
+
+Run INIT phase for module  #1     INPUT_CREATE...
+
+Run INIT phase for module  #2     HDR_MATH...
+
+Run INIT phase for module  #3     RAY2D...
+Constant receiver Z coordinate = 1620.00
+Constant source Z coordinate = 10.00
+Number of interfaces: 7, max number of points per interface: 2
+
+Model point #0  :        -11.000        0.000
+Model point #1  :         11.000        0.000
+Model point #2  :        -11.000        1.620
+Model point #3  :         11.000        1.620
+Model point #4  :        -11.000        1.780
+Model point #5  :         11.000        1.780
+Model point #6  :        -11.000        2.100
+Model point #7  :         11.000        2.100
+Model point #8  :        -11.000        3.300
+Model point #9  :         11.000        3.300
+Model point #10 :        -11.000        4.000
+Model point #11 :         11.000        4.000
+Model point #12 :        -11.000        5.000
+Model point #13 :         11.000        5.000
+ Warning: Unused user parameter in module setup: 'layer'
+
+Run INIT phase for module  #4     OUTPUT...
+
+  File name:             data/t04_syn_data.cseis
+  Sample interval [ms]:  2.000000
+  Number of samples:     4000
+
+
+Run INIT phase for module  #5     FFT...
+*** START Super header ***
+Sample interval:        0.122070 Hz
+Number of samples:      2049
+Domain code:            111 (= x-frequency domain)
+FFT data type:           503 (= Amplitude spectrum)
+# ensemble keys:        0
+Grid origin row/col:                   1                    1
+Grid origin XY coord.:           0.00000 m            0.00000 m
+Grid bin size (il/xl):           0.00000 m            0.00000 m  (corresponding to row/col interval = 1)
+Inline/xl direction:             0.00000 deg         90.00000 deg  (clock-wise from North)
+*** END Super header ***
+Perform FFT transform. Total number of samples to transform:  4096
+Number of input/output samples:  4000 / 2049, Number of XT samples saved in super header: 4000
+Frequency interval in output spectrum: 1/T = 1/8.1920     =   0.122070; Max freq =     250.00
+
+Run INIT phase for module  #6     SELECT_TIME...
+
+Run INIT phase for module  #7     OUTPUT...
+
+  File name:             data/t04_syn_data_spectrum.cseis
+  Sample interval [ms]:  0.122070
+  Number of samples:     492
+
+
+------------------------------------------------------------
+Init phase summary
+
+  #  Module                sampleInt  numSamples  #headers
+  1  INPUT_CREATE            2.00000        4000         3
+  2  HDR_MATH                2.00000        4000         5
+  3  RAY2D                   2.00000        4000        41
+  4  OUTPUT                  2.00000        4000        41
+  5  FFT                     0.12207        2049        41
+  6  SELECT_TIME             0.12207         492        41
+  7  OUTPUT                  0.12207         492        41
+
+Init phase processing time:      0.006000 seconds
+
+
+
+================================================================================
+
+Run exec phase...
+
+numTraces: 120, nrec: 120 11  0.040000 0.020000 0.040143
+
+Number of computed ray path arrivals: 14   (may include direct arrival path and/or secondary arrivals)
+
+------------------------------------------------------------
+Exec phase summary
+
+  #  Module                Traces in  Traces out     CPU time   CPU time all
+  1  INPUT_CREATE                  0         120        0.022          0.022
+  2  HDR_MATH                    120         120        0.000          0.022
+  3  RAY2D                       120         120        3.079          3.101
+  4  OUTPUT                      120         120        0.001          3.102
+  5  FFT                         120         120        0.095          3.197
+  6  SELECT_TIME                 120         120        0.000          3.197
+  7  OUTPUT                      120         120        0.000          3.197
+
+------------------------------------------------------------
+
+ Total processing time:      3.204000 seconds
+
+ Date: Tue Jun 16 17:45:44 2015
+
+
+ Trace allocation summary:
+ Total number of used/allocated traces:  121/148
+ Total number of allocated (trace) memory:  1796.88kb  (= 1.75Mb)
+
+
+
+ End of log.
+================================================================================

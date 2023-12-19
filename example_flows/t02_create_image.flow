@@ -1,0 +1,30 @@
+#--------------------------------------------------------------
+# Example SeaSeis flow
+# Date: 7 Nov 2011
+# SeaSeis version v1.12
+#
+
+$IMAGE
+ filename             images/t02_image.png
+ seismic_filename     data/t01_pseudo_data.cseis
+ temp_dir             data
+ width                400  
+ height               800  
+ trace_spacing        even  
+ header               rcv
+ title                "Example data image"
+ fontsize             12
+ disp_scalar          20
+ scale_type           scalar  
+ wiggle               linear  
+ vi_type              spline
+ pos_fill             yes  
+ neg_fill             no
+ var_color            no  
+ show_zero_lines      no
+ show_time_lines      yes  
+ time_major_inc       2500
+ time_minor_inc       500
+ time_max_decimals    1
+ vi_color_map         cold_warm
+ trace_clip           10

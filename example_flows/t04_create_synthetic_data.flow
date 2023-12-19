@@ -1,0 +1,79 @@
+#--------------------------------------------------------------
+# Example SeaSeis flow
+# Date: 7 Nov 2011
+# SeaSeis version v1.14
+#
+
+$INPUT_CREATE
+ ntraces      120
+ length       8000
+ sample_int   2
+ noise        0.0001
+ value        0.0
+
+$HDR_MATH
+ new rec_x
+ new sou_x
+ equation rec_x "trcno * 50.0"
+ equation sou_x "0.0"
+
+$RAY2D
+ seismogram   20 dynamic
+ gather       source
+ model_type   1d  vs
+ max_offset   11000
+ dt_ray       40
+ spread_dist  20
+ spread_angle 2.3
+ nrays        400
+ rec_x    rec_x
+ rec_z    1620
+ rec_loc  2 2
+ sou_x    sou_x
+ sou_z    10
+ sou_loc  1
+ int1d 1 0
+ int1d 2 1620
+ int1d 3 1780
+ int1d 4 2100
+ int1d 5 3300
+ int1d 6 4000
+ int1d 7 5000
+ layer 1 1475 1
+ layer 2 1500 200
+ layer 3 1670 280
+ layer 4 2040 600
+ layer 5 3500 1400
+ layer 6 3600 1600
+ layer 7 3700 1700
+ # P-wave ray paths (P-wave: Positive layer numbers, S-wave: Negative layer numbers)
+ ray_code 1 2 2
+ ray_code 1 2 3 3 2
+ ray_code 1 2 3 4 4 3 2
+ ray_code 1 2 3 4 5 5 4 3 2
+ # P-wave source-side multiple ray paths
+ ray_code 1 1 1 2 2
+ ray_code 1 1 1 2 3 3 2
+ ray_code 1 1 1 2 3 4 4 3 2
+ ray_code 1 1 1 2 3 4 5 5 4 3 2
+ # Converted wave ray paths
+ ray_code 1 2 -2
+ ray_code 1 2 3 -3 -2
+ ray_code 1 2 3 4 -4 -3 -2
+ ray_code 1 2 3 4 5 -5 -4 -3 -2
+# dump_model model.out
+
+$OUTPUT
+ filename    data/t04_syn_data.cseis
+
+# Transform to frequency domain
+$FFT
+ output amp
+
+# Selecting frequency range, specified in [Hz]
+$SELECT_TIME
+ start 0
+ end   60
+
+$OUTPUT
+ filename    data/t04_syn_data_spectrum.cseis

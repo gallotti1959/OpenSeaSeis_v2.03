@@ -1,0 +1,59 @@
+
+*** OpenSeaSeis v2.03 ***
+
+
+*** HOW TO INSTALL ***
+
+Linux installation - quick overview
+1) Extract downloaded tar file into arbitrary directory
+   For example:
+   mkdir /opt/seaseis; cp seaseis_v2.03.tgz /opt/seaseis; cd /opt/seaseis;
+   tar xfz seaseis_v2.03.tgz
+   The tar file will extract into directory: /opt/seaseis/seaseis_v2.03
+2) Review compiler settings
+   If necessary, change compilers at the top of the bash script make_seaseis.sh
+3) Run make
+   cd /opt/seaseis/seaseis_v2.03
+   ./make_seaseis.sh
+4) Add Seaseis bin directory to your binary path
+   bash:  export PATH=${PATH}:/opt/seaseis/bin
+   tcsh:  set path = ($path /opt/seaseis/bin)
+5) Run seaseis/seaview
+   seaseis -h
+   seaview.sh
+
+For more details:
+- Read instructions on web site cwp.mines.edu/cwpcodes/OpenSeaSeis
+- Read instructions in make utility scripts in this directory:
+
+make_java.sh            Make utility for Java source code (There is no need to use this since the jar files are provided)
+make_seaseis.sh         Make utility for Linux
+make_seaseis_win32.bat  Make utility for Windows 32bit, make on Windows system (MinGW)
+make_seaseis_win32.sh   Make utility for Windows 32bit, make on Linux system (MinGW)
+make_seaseis_win64.bat  Make utility for Windows 64bit, make on Windows system (MinGW)
+make_seaseis_win64.sh   Make utility for Windows 64bit, make on Linux system (MinGW)
+
+
+Seismic Unix:
+- See README_SEISMIC_UNIX for details
+
+How to install fftw libraries:
+- Download and extract fftw source code distribution from http://www.fftw.org/download.html
+- ./configure --enable-float
+- make
+- make install
+
+--------------------------------------------------------------------------------------
+
+*** Updates from OpenSeaSeis v2.021 to v2.03 ***
+Seaseis:
+- Modules FFT and FFT_2D: Fixed build problems with/without FFTW
+- Module IMAGE: Removed debug output
+- Module NMO: Added support for 2 keys for velocity table interpolation. New user parameter set is not fully backward compatible.
+Seaview:
+- Trace header overlay: New default for trace interval = 1 (was: 2). Update when refreshing input file.
+- Compute spectrum only on left mouse click
+- Fixed several bugs related to pane selection & active pane
+- Combine data sets: Added support for frequency domain data
+- Menu bar: Added back 8/32-bit display options
+- Ensemble selection

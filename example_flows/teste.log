@@ -1,0 +1,144 @@
+================================================================================
+
+ SeaSeis Version 2.05   (built  Apr 21 2018 15:30:24)
+ Date: Tue Dec 19 09:22:38 2023
+
+
+================================================================================
+
+
+Pre-parse input file 'teste.flow'...
+
+Pre-parser summary:
+
+  Parsed  34 lines,
+   found   1 'define' statement(s),
+           0 table(s), and
+           6 module(s).
+
+Input flow 'teste.flow':
+
+#--------------------------------------------------------------
+# Example SeaSeis flow
+# Date: 21 Jan 2012
+# SeaSeis version v1.90
+#
+&define trace_length  5000   # Define variable
+
+$INPUT_CREATE
+ length       5000  # Use variable
+ sample_int   2
+ noise        0.01
+ value        2.0
+ point_source 1.0 1000.0 0
+ point_source_xy  0.0 0.0
+ rec_geom     rec_geom.txt
+
+$FILTER
+ lowpass  60
+ highpass 4
+
+$STACK
+ mode   unsorted
+ header rec_x
+ norm   0.0
+
+$OUTPUT
+ filename    t01_pseudo_data.cseis
+
+$FFT
+ output amp   # Output amplitude spectrum
+
+$OUTPUT
+ filename    t01_pseudo_data_spectrum.cseis
+
+
+End of flow.
+================================================================================
+
+Run init phase...
+
+
+Run INIT phase for module  #1     INPUT_CREATE...
+
+Run INIT phase for module  #2     FILTER...
+
+Run INIT phase for module  #3     STACK...
+
+Run INIT phase for module  #4     OUTPUT...
+
+  File name:             t01_pseudo_data.cseis
+  Sample interval [ms]:  2.000000
+  Number of samples:     2500
+
+
+Run INIT phase for module  #5     FFT...
+*** START Super header ***
+Sample interval:        0.122070 Hz
+Number of samples:      2049
+Domain code:            111 (= x-frequency domain)
+FFT data type:          503 (= Amplitude spectrum)
+   FFT parameters (if applicable): XT Number of samples/sampleInt: 2500 / 2.000000
+# ensemble keys:        0
+Grid origin row/col:                   1                    1
+Grid origin XY coord.:           0.00000 m            0.00000 m
+Grid bin size (il/xl):           0.00000 m            0.00000 m  (corresponding to row/col interval = 1)
+Inline/xl direction:             0.00000 deg         90.00000 deg  (clock-wise from North)
+*** END Super header ***
+Perform FFT transform. Total number of samples to transform:  4096
+Number of input/output samples:  2500 / 2049, Number of XT samples saved in super header: 2500
+Frequency interval in output spectrum: 1/T = 1/8.1920     =   0.122070; Max freq =     250.00
+
+Run INIT phase for module  #6     OUTPUT...
+
+  File name:             t01_pseudo_data_spectrum.cseis
+  Sample interval [ms]:  0.122070
+  Number of samples:     2049
+
+
+------------------------------------------------------------
+Init phase summary
+
+  #  Module                sampleInt  numSamples  #headers
+  1  INPUT_CREATE            2.00000        2500         6
+  2  FILTER                  2.00000        2500         6
+  3  STACK                   2.00000        2500         7
+  4  OUTPUT                  2.00000        2500         7
+  5  FFT                     0.12207        2049         7
+  6  OUTPUT                  0.12207        2049         7
+
+Init phase processing time:      0.006000 seconds
+
+
+
+================================================================================
+
+Run exec phase...
+
+
+------------------------------------------------------------
+Exec phase summary
+
+  #  Module                Traces in  Traces out     CPU time   CPU time all
+  1  INPUT_CREATE                  0         120        0.008          0.008
+  2  FILTER                      120         120        0.134          0.142
+  3  STACK                       120          30        0.002          0.144
+  4  OUTPUT                       30          30        0.000          0.144
+  5  FFT                          30          30        0.007          0.151
+  6  OUTPUT                       30          30        0.000          0.151
+
+------------------------------------------------------------
+
+ Total processing time:      0.158000 seconds
+
+ Date: Tue Dec 19 09:22:38 2023
+
+
+ Trace allocation summary:
+ Total number of used/allocated traces:  31/44
+ Total number of allocated (trace) memory:  263.67kb  (= 0.26Mb)
+
+
+
+ End of log.
+================================================================================

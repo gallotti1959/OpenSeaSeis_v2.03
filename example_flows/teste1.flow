@@ -1,0 +1,10 @@
+$INPUT_SEGY
+filename 0303_3D_NORTE_CANTO_DO_AMARO_VEL_AREA01.3D.PSTM.2.sgy 
+header cdpx 181  int int
+header cdpy 185  int int 
+
+$HDR_PRINT
+filename hrd.txt
+header cdpx cdpy
+$OUTPUT
+filename 3D.cseis

@@ -1,0 +1,172 @@
+================================================================================
+
+ SeaSeis Version 2.05   (built  Apr 21 2018 15:30:24)
+ Date: Tue Dec 19 10:23:47 2023
+
+
+================================================================================
+
+
+Pre-parse input file 'teste1.flow'...
+
+Pre-parser summary:
+
+  Parsed  10 lines,
+   found   0 'define' statement(s),
+           0 table(s), and
+           3 module(s).
+
+Input flow 'teste1.flow':
+
+$INPUT_SEGY
+filename 0303_3D_NORTE_CANTO_DO_AMARO_VEL_AREA01.3D.PSTM.2.sgy 
+header cdpx 181  int int
+header cdpy 185  int int 
+
+$HDR_PRINT
+filename hrd.txt
+header cdpx cdpy
+$OUTPUT
+filename 3D.cseis
+
+End of flow.
+================================================================================
+
+Run init phase...
+
+
+Run INIT phase for module  #1     INPUT_SEGY...
+Input file #   0: 0303_3D_NORTE_CANTO_DO_AMARO_VEL_AREA01.3D.PSTM.2.sgy
+
+Segy EBCDIC header:
+
+C 1 CLIENT PETROBRAS              COMPANY                       CREW NO         ++
+C 2 LINE 00009-00629     AREA 0303_3D_NORTE_CANTO_DO_AMARO                      ++
+C 3 REEL NO.          DAY-START OF REEL     YEAR      OBSERVER                  ++
+C 4 INSTRUMENT  MFG            MODEL            SERIAL NO                       ++
+C 5 DATA TRACES/RECORD        AUXILIARY TRACES/RECORD         CDP FOLD          ++
+C 6 SAMPLE INTERVAL    4000 SAMPLES/TRACE  1001 BITS/IN      BYTES/SAMPLE 4     ++
+C 7 RECORDING FORMAT        FORMAT THIS REEL ANP1B MEASUREMENT SYSTEM METRIC    ++
+C 8 SAMPLE CODE                                                                 ++
+C 9 GAIN  TYPE                                                                  ++
+C10 FILTERS                                                                     ++
+C11 SOURCE TYPE             NUMBER/POINT        POINT INTERVAL                  ++
+C12     PATTERN                            LENGTH        WIDTH                  ++
+C13 GEOPHONES PER GROUP      SPACING                                            ++
+C14    STREAMERS        PER TRACES         LENGTH        WIDTH                  ++
+C15 SPREAD OFFSET         MAX DISTANCE        GROUP INTERVAL                    ++
+C16                                                                             ++
+C17                                                                             ++
+C18 TRACES SORTED BY                                                            ++
+C19 AMPLITUDE RECOVERY                                                          ++
+C20 MAP PROJECTION UTM                  ZONE ID 24    COORDINATE UNITS METERS   ++
+C21 PROCESSING: UN-RNCE   - PETROBRAS                                           ++
+C22 PROCESSING: Gestor Sismica-gestorsismica@petrobras.com.br - 21 2144-4115    ++
+C23 ANALISE DE VELOCIDADE POS-DMO, SAIDA SEGY                                   ++
+C24 SPEC WHITE ( N=14 6-8-235-250) /  RESID SUP /  AGC /                        ++
+C25 PSTM / MUTE / SHIFT +200MS / STACK /  MIX_2D /  INTERP                      ++
+C26 EIG / FILTER (8-10-65-70) /AGC                                              ++
+C27                                                                             ++
+C28                                                                             ++
+C29                                                                             ++
+C30                                                                             ++
+C31                                                                             ++
+C32                                                                             ++
+C33                                                                             ++
+C34                                                                             ++
+C35                                                                             ++
+C36 GRID X1   692283.97 Y1  9423333.23 X2   682989.47 Y2  9434331.97            ++
+C37      X3   699386.44 Y3  9429336.11  IL BINSIZE 300.00  XL BINSIZE 300.02    ++
+C38 CENTRAL MERIDIAN -39                                                        ++
+C39 DATUM SAD-69               DATUM CODE 01       PROJECTION CODE 001          ++
+C40 END EBCDIC                                                                  ++
+Segy binary header:
+
+Job identification number     : 0
+Line number                   : 0
+Reel number                   : 0
+Number of traces/ensemble     : 1101
+Number of aux traces/ensemble : 0
+Sample interval [us]          : 4000
+Sample interval(field tape)[us]:4000
+Number of samples             : 1001
+Number of samples (field tape): 1001
+Data sample format            : 1
+Ensemble fold                 : 0
+Trace sort code               : 4
+Vertical sum code             : 0
+Sweep freq at start           : 0
+Sweep freq at end             : 0
+Sweep type code               : 0
+Taper type                    : 0
+Correlated data traces        : 0
+Binary gain recovered         : 0
+Amplitude recovery method     : 0
+Measurement system            : 1
+Impulse signal polarity       : 0
+Vibratory polarity code       : 0
+SEG Y Format Revision number  : 0
+Fixed length trace flag       : 1
+Extended header blocks        : 0
+
+  File name:            0303_3D_NORTE_CANTO_DO_AMARO_VEL_AREA01.3D.PSTM.2.sgy
+  Sample interval [ms]: 4.000000
+  Number of samples:    1001
+  Sample data format:   1   (Supported formats are: 1:IBM, 2:32bit INT, 3:16bit INT, 5:IEEE)
+
+
+Maximum number of buffered traces:    20
+
+Run INIT phase for module  #2     HDR_PRINT...
+
+Print format string (C-style): '%12d %12d '
+Title format string (C-style): '%12s %12s '
+
+
+Run INIT phase for module  #3     OUTPUT...
+
+  File name:             3D.cseis
+  Sample interval [ms]:  4.000000
+  Number of samples:     1001
+
+
+------------------------------------------------------------
+Init phase summary
+
+  #  Module                sampleInt  numSamples  #headers
+  1  INPUT_SEGY              4.00000        1001        93
+  2  HDR_PRINT               4.00000        1001        93
+  3  OUTPUT                  4.00000        1001        93
+
+Init phase processing time:      0.001000 seconds
+
+
+
+================================================================================
+
+Run exec phase...
+
+
+------------------------------------------------------------
+Exec phase summary
+
+  #  Module                Traces in  Traces out     CPU time   CPU time all
+  1  INPUT_SEGY                    0        1101        0.008          0.008
+  2  HDR_PRINT                  1101        1101        0.002          0.010
+  3  OUTPUT                     1101        1101        0.003          0.013
+
+------------------------------------------------------------
+
+ Total processing time:      0.015000 seconds
+
+ Date: Tue Dec 19 10:23:47 2023
+
+
+ Trace allocation summary:
+ Total number of used/allocated traces:  1/4
+ Total number of allocated (trace) memory:  0.00kb  (= 0.00Mb)
+
+
+
+ End of log.
+================================================================================
